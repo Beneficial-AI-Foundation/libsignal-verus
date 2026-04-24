@@ -1,5 +1,18 @@
 [workspace]
 # When adding new members, consider updating the log filter in rust/bridge/shared/src/logging.rs.
+# ============================================================================
+# BEGIN verus-verify patch  (not in upstream libsignal)
+# ----------------------------------------------------------------------------
+# Excludes the `verification/` directory from this workspace so that the
+# standalone Verus harness crates (`verification/verus/seam_crate/`,
+# `verification/verus/seam_real/`) do not interfere with the main libsignal
+# build. Those crates have their own Cargo.toml files targeting Verus and
+# should only be compiled via `cargo verus verify` from their own directories.
+# ============================================================================
+exclude = ["verification"]
+# ============================================================================
+# END verus-verify patch
+# ============================================================================
 members = [
     "rust/attest",
     "rust/crypto",

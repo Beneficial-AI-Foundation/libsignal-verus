@@ -55,6 +55,41 @@ kyber768 = ["libcrux-ml-kem/kyber", "libcrux-ml-kem/mlkem768"]
 # libsignal will update to match.
 mlkem1024 = []
 
+# ============================================================================
+# BEGIN verus-verify patch  (not in upstream libsignal)
+# ----------------------------------------------------------------------------
+# Adds a `verus-verify` feature that pulls in Verus's `vstd`/`verus_builtin`
+# crates and marks this package as a Verus verification target via
+# `[package.metadata.verus]`. All three crates are optional, so `cargo check`
+# / `cargo build` without the feature is byte-identical to upstream.
+# Enable with:  cargo verus verify -p libsignal-protocol --features verus-verify
+# See: docs/VERIFICATION_REPORT.md §"Source-tree changes to libsignal-protocol"
+# ============================================================================
+verus-verify = ["dep:vstd", "dep:verus_builtin", "dep:verus_builtin_macros"]
+
+[dependencies.vstd]
+git = "https://github.com/verus-lang/verus"
+rev = "6f7d4dec"
+optional = true
+
+[dependencies.verus_builtin]
+git = "https://github.com/verus-lang/verus"
+rev = "6f7d4dec"
+optional = true
+
+[dependencies.verus_builtin_macros]
+git = "https://github.com/verus-lang/verus"
+rev = "6f7d4dec"
+optional = true
+
+[package.metadata.verus]
+verify = true
+release = "0.2026.04.19.6f7d4de"
+rust-version = "1.95.0"
+# ============================================================================
+# END verus-verify patch
+# ============================================================================
+
 [dev-dependencies]
 libsignal-protocol-test-support = { path = "test-support" }
 

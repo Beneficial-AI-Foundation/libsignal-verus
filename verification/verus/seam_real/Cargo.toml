@@ -1,0 +1,23 @@
+[package]
+name = "seam_real"
+version = "0.0.1"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = { git = "https://github.com/verus-lang/verus", rev = "6f7d4dec" }
+verus_builtin = { git = "https://github.com/verus-lang/verus", rev = "6f7d4dec" }
+verus_builtin_macros = { git = "https://github.com/verus-lang/verus", rev = "6f7d4dec" }
+
+# Real libsignal types — marked external to Verus so we can reason about
+# function contracts that use them without having to verify their bodies.
+libsignal-protocol = { path = "../../../rust/protocol", features = ["verus-verify"] }
+libsignal-core = { path = "../../../rust/core" }
+
+[package.metadata.verus]
+verify = true
+release = "0.2026.04.19.6f7d4de"
+rust-version = "1.95.0"

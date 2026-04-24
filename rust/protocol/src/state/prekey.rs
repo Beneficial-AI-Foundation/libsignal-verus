@@ -10,11 +10,51 @@ use prost::Message;
 use crate::proto::storage::PreKeyRecordStructure;
 use crate::{KeyPair, PrivateKey, PublicKey, Result, SignalProtocolError};
 
+// ============================================================================
+// BEGIN verus-verify patch  (differs from upstream libsignal)
+// ----------------------------------------------------------------------------
+// Upstream:
+//     #[derive(
+//         Copy, Clone, Debug, Hash, Eq, PartialEq, Ord, PartialOrd,
+//         derive_more::From, derive_more::Into,
+//     )]
+//     pub struct PreKeyId(u32);
+//
+// Patch: gate the `derive_more::Into` derive to non-verus builds, and add an
+// equivalent hand-written `impl From<PreKeyId> for u32` under the verus-verify
+// feature.
+//
+// Rationale: `#[derive(derive_more::Into)]` expands to
+// `#[automatically_derived] impl From<PreKeyId> for u32 { ... }`.
+// Verus's `rust_verify::external::get_attributes_for_automatic_derive` walker
+// (see `external.rs:656` in Verus 0.2026.04.19) unconditionally calls
+// `.def_id()` on the `self_ty` of every `#[automatically_derived]` impl;
+// when `self_ty` is a primitive like `u32`, `path.res` is
+// `Res::PrimTy(Uint(u32))` which has no DefId, and the walker panics.
+//
+// The hand-written impl is semantically identical (same `From<PreKeyId> for u32`
+// trait, same body), but does not carry `#[automatically_derived]` and so
+// bypasses the panicking code path. No callsite changes are required; every
+// caller that uses `u32::from(id)` or `id.into()` continues to work under both
+// feature states.
+//
+// See: docs/VERIFICATION_REPORT.md §"Verus panics and workarounds" (panic 1).
+// ============================================================================
+
 /// A unique identifier selecting among this client's known pre-keys.
 #[derive(
-    Copy, Clone, Debug, Hash, Eq, PartialEq, Ord, PartialOrd, derive_more::From, derive_more::Into,
+    Copy, Clone, Debug, Hash, Eq, PartialEq, Ord, PartialOrd, derive_more::From,
 )]
+#[cfg_attr(not(feature = "verus-verify"), derive(derive_more::Into))]
 pub struct PreKeyId(u32);
+
+#[cfg(feature = "verus-verify")]
+impl From<PreKeyId> for u32 {
+    fn from(id: PreKeyId) -> Self { id.0 }
+}
+// ============================================================================
+// END verus-verify patch
+// ============================================================================
 
 impl fmt::Display for PreKeyId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

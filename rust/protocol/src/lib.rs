@@ -22,6 +22,19 @@
 // https://doc.rust-lang.org/rustdoc/what-to-include.html for background.
 // #![warn(missing_docs)]
 
+// ============================================================================
+// BEGIN verus-verify patch  (not in upstream libsignal)
+// ----------------------------------------------------------------------------
+// Registers the Verus specification module. Under `#[cfg(feature = "verus-verify")]`
+// only — no effect on default builds. Source of the spec itself:
+// `rust/protocol/src/verus_seam2.rs` (also a patch file).
+// ============================================================================
+#[cfg(feature = "verus-verify")]
+mod verus_seam2;
+// ============================================================================
+// END verus-verify patch
+// ============================================================================
+
 mod consts;
 mod crypto;
 mod double_ratchet;

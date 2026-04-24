@@ -1,0 +1,18 @@
+[package]
+name = "seam_crate"
+version = "0.0.1"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = { git = "https://github.com/verus-lang/verus", rev = "6f7d4dec" }
+verus_builtin = { git = "https://github.com/verus-lang/verus", rev = "6f7d4dec" }
+verus_builtin_macros = { git = "https://github.com/verus-lang/verus", rev = "6f7d4dec" }
+
+[package.metadata.verus]
+verify = true
+release = "0.2026.04.19.6f7d4de"
+rust-version = "1.95.0"
