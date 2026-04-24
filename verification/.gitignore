@@ -1,0 +1,4 @@
+# Ignore Rust build artifacts inside the standalone Verus harness crates.
+# (Upstream libsignal's root `.gitignore` only matches `/target`, not
+# nested ones — this file covers `verification/verus/*/target/` etc.)
+**/target/

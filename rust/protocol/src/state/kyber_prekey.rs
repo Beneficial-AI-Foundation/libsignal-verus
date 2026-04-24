@@ -11,11 +11,29 @@ use crate::proto::storage::SignedPreKeyRecordStructure;
 use crate::state::GenericSignedPreKey;
 use crate::{PrivateKey, Result, Timestamp, kem};
 
+// ============================================================================
+// BEGIN verus-verify patch  (differs from upstream libsignal)
+// ----------------------------------------------------------------------------
+// Upstream had `derive_more::Into` alongside `derive_more::From` in the derive
+// list. See `state/prekey.rs` for the full rationale — Verus's walker panics
+// on `#[automatically_derived] impl ... for <primitive>`; the hand-written
+// impl is semantically equivalent and bypasses the bug.
+// ============================================================================
+
 /// A unique identifier selecting among this client's known signed pre-keys.
 #[derive(
-    Copy, Clone, Debug, Hash, Eq, PartialEq, Ord, PartialOrd, derive_more::From, derive_more::Into,
+    Copy, Clone, Debug, Hash, Eq, PartialEq, Ord, PartialOrd, derive_more::From,
 )]
+#[cfg_attr(not(feature = "verus-verify"), derive(derive_more::Into))]
 pub struct KyberPreKeyId(u32);
+
+#[cfg(feature = "verus-verify")]
+impl From<KyberPreKeyId> for u32 {
+    fn from(id: KyberPreKeyId) -> Self { id.0 }
+}
+// ============================================================================
+// END verus-verify patch
+// ============================================================================
 
 impl fmt::Display for KyberPreKeyId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

@@ -2949,6 +2949,9 @@ dependencies = [
  "subtle",
  "thiserror 2.0.17",
  "uuid",
+ "verus_builtin",
+ "verus_builtin_macros",
+ "vstd",
  "zerocopy",
 ]
 
@@ -5572,6 +5575,54 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
+name = "verus_builtin"
+version = "0.0.0-2026-04-12-0118"
+source = "git+https://github.com/verus-lang/verus?rev=6f7d4dec#6f7d4dec0d6720202cc5221de95f1ef29cfd788d"
+
+[[package]]
+name = "verus_builtin_macros"
+version = "0.0.0-2026-04-19-0121"
+source = "git+https://github.com/verus-lang/verus?rev=6f7d4dec#6f7d4dec0d6720202cc5221de95f1ef29cfd788d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.114",
+ "synstructure",
+ "verus_prettyplease",
+ "verus_syn",
+]
+
+[[package]]
+name = "verus_prettyplease"
+version = "0.0.0-2026-04-12-0118"
+source = "git+https://github.com/verus-lang/verus?rev=6f7d4dec#6f7d4dec0d6720202cc5221de95f1ef29cfd788d"
+dependencies = [
+ "proc-macro2",
+ "verus_syn",
+]
+
+[[package]]
+name = "verus_state_machines_macros"
+version = "0.0.0-2026-04-19-0121"
+source = "git+https://github.com/verus-lang/verus?rev=6f7d4dec#6f7d4dec0d6720202cc5221de95f1ef29cfd788d"
+dependencies = [
+ "indexmap 1.9.3",
+ "proc-macro2",
+ "quote",
+ "verus_syn",
+]
+
+[[package]]
+name = "verus_syn"
+version = "0.0.0-2026-04-05-0114"
+source = "git+https://github.com/verus-lang/verus?rev=6f7d4dec#6f7d4dec0d6720202cc5221de95f1ef29cfd788d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
+]
+
+[[package]]
 name = "visibility"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5580,6 +5631,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.114",
+]
+
+[[package]]
+name = "vstd"
+version = "0.0.0-2026-04-19-0121"
+source = "git+https://github.com/verus-lang/verus?rev=6f7d4dec#6f7d4dec0d6720202cc5221de95f1ef29cfd788d"
+dependencies = [
+ "verus_builtin",
+ "verus_builtin_macros",
+ "verus_state_machines_macros",
 ]
 
 [[package]]
